@@ -4,15 +4,81 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
+    private Rigidbody rb;
+    public float dashSpeed;
+    private float dashTime;
+    public float startDashTime;
+    private int direction;
     private Vector3 originPos;
     public int Speed;
+    public GameObject dashEffect;
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        dashTime = startDashTime;
         originPos = transform.position;
     }
     void Update()
     {
+        //대시구현
+        if (direction == 0)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow) && Input.GetKey(KeyCode.F))
+            {
+                Instantiate(dashEffect, transform.position, Quaternion.identity);
+                direction = 1;
+                soundManager.instance.PlaySoundDash();
+            }
+            else if (Input.GetKeyDown(KeyCode.RightArrow) && Input.GetKey(KeyCode.F))
+            {
+                Instantiate(dashEffect, transform.position, Quaternion.identity);
+                direction = 2;
+                soundManager.instance.PlaySoundDash();
+            }
+            else if (Input.GetKeyDown(KeyCode.UpArrow) && Input.GetKey(KeyCode.F))
+            {
+                Instantiate(dashEffect, transform.position, Quaternion.identity);
+                direction = 3;
+                soundManager.instance.PlaySoundDash();
+            }
+            else if (Input.GetKeyDown(KeyCode.DownArrow) && Input.GetKey(KeyCode.F))
+            {
+                Instantiate(dashEffect, transform.position, Quaternion.identity);
+                direction = 4;
+                soundManager.instance.PlaySoundDash();
+            }
+        }
+        else
+        {
+            if (dashTime <= 0)
+            {
+                direction = 0;
+                dashTime = startDashTime;
+                rb.velocity = Vector3.zero;
+            }
+            else
+            {
+                dashTime -= Time.deltaTime;
+
+                if (direction == 1)
+                {
+                    rb.velocity = Vector3.back * dashSpeed;
+                }
+                else if (direction == 2)
+                {
+                    rb.velocity = Vector3.forward * dashSpeed;
+                }
+                else if (direction == 3)
+                {
+                    rb.velocity = Vector3.up * dashSpeed;
+                }
+                else if (direction == 4)
+                {
+                    rb.velocity = Vector3.down * dashSpeed;
+                }
+            }
+        }
         //이동구현
         if (Input.GetKey(KeyCode.RightArrow))
         {
