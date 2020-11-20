@@ -15,4 +15,12 @@ public class goal : MonoBehaviour
     {
         
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Ball"))
+        {
+            print("score");
+        }
+    }
 }
